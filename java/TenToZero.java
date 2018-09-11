@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class TenToZero {
-    static int POSITIONS = 10;
+    static int MAX_POSITION = 10;
     static int MAX_MOVES = 2;
 
     public static PosValue primitive(int pos) {

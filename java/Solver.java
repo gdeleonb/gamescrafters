@@ -30,8 +30,8 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        solved_pos = new HashMap<>(TenToZero.POSITIONS, 1);
-        for (int pos = 0; pos <= TenToZero.POSITIONS; pos++) {
+        solved_pos = new HashMap<>(TenToZero.MAX_POSITION, 1);
+        for (int pos = 0; pos <= TenToZero.MAX_POSITION; pos++) {
             PosValue pVal = solve(pos);
             solved_pos.put(pos, pVal);
 
