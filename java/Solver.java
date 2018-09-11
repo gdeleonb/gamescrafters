@@ -37,7 +37,7 @@ public class Solver {
 
             String output;
             if (pVal.equals("winning")) {
-                output = String.format("Position %d is a %s position with a remoteness of %d through move '%d'.\n", pos, pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
+                output = String.format("Position %d is a %s position with a remoteness of %d by playing '%d'.\n", pos, pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
             } else {
                 output = String.format("Position %d is a %s position with a remoteness of %d.\n", pos, pVal.getValue(), pVal.getRemoteness());
             }
