@@ -18,4 +18,8 @@ public class TenToZero {
     public static int doMove(int pos, int move) {
         return pos - move;
     }
+
+    public static String posToString(int p) {
+        return String.format("%d", p);
+    }
 }

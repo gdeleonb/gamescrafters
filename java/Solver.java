@@ -36,10 +36,10 @@ public class Solver {
             solved_pos.put(pos, pVal);
 
             String output;
-            if (pVal.equals("winning")) {
-                output = String.format("Position %d is a %s position with a remoteness of %d by playing '%d'.\n", pos, pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
+            if (pVal.equals("winning") && pVal.getRemoteness() != 0) {
+                output = String.format("%s is a %s position with a remoteness of %d by playing '%d'.\n", TenToZero.posToString(pos), pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
             } else {
-                output = String.format("Position %d is a %s position with a remoteness of %d.\n", pos, pVal.getValue(), pVal.getRemoteness());
+                output = String.format("%s is a %s position with a remoteness of %d.\n", TenToZero.posToString(pos), pVal.getValue(), pVal.getRemoteness());
             }
 
             System.out.print(output);
