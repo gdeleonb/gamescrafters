@@ -4,8 +4,8 @@ public class TenToZero {
     static int POSITIONS = 10;
     static int MAX_MOVES = 2;
 
-    public static String primitive(int pos) {
-        return (pos == 0) ? "losing" : "undecided";
+    public static PosValue primitive(int pos) {
+        return new PosValue(((pos == 0) ? "losing" : "undecided"), 0);
     }
 
     public static ArrayList<Integer> generateMoves(int pos) {
