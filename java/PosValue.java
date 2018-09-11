@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class PosValue {
     private String value; // Will be 'winning', 'losing', or 'undecided'
     private int remoteness; // Number of moves away from conclusion
@@ -17,11 +19,28 @@ public class PosValue {
     public String getValue() { return value; }
     public int getRemoteness() { return remoteness; }
     public int getWinningMove() {
-        if (!this.value.equals("winning")) return -1;
+        if (!value.equals("winning")) return -1;
         return winningMove;
     }
 
-    public Boolean equals(String str) {
-        return this.value.equals(str);
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof PosValue) {
+            PosValue pv = (PosValue) o;
+            return ((value.equals(pv.getValue())) &&
+             (remoteness == pv.getRemoteness()) &&
+             (winningMove == pv.getWinningMove()));
+        }
+        if (o instanceof String) {
+            String str = (String) o;
+            return value.equals(str);
+        }
+        return false;
+    }
+
+    public int hashCode() {
+        return Objects.hash(value, remoteness, winningMove);
     }
 }
