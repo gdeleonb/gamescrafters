@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.lang.reflect.*;
 
 public class Solver {
     private HashMap<Integer, PosValue> solvedPos;
@@ -35,18 +36,29 @@ public class Solver {
 
     public static void main(String[] args) {
         Game game;
-        if (args.length != 1) {
-            System.out.println("Must pass in a game class name.");
-            System.exit(-1);
+        try {
+            if (args.length < 1) {
+                System.out.println("Must pass in a game class name.");
+                System.exit(-1);
+            }
+            if (args.length == 2) {
+                Class<?> c = Class.forName(args[0]);
+                Constructor<?> con = c.getConstructor(int.class);
+                game = (Game) con.newInstance(Integer.parseInt(args[1]));
+            } else {
+                game = (Game) Class.forName(args[0]).newInstance();
+            }
+        } catch (NumberFormatException nfe) {
+            game = new TenToZero();
+            System.out.printf("The second argument must be an integer. Error: %s\n", nfe);
+            System.exit(1);
+        } catch (Exception e) {
+            game = new TenToZero();
+            System.out.println(e);
+            System.exit(1);
         }
 
-        if (args[0].equals("OddEven")) {
-            game = new OddEven();
-        } else if (args[0].equals("TenToZero")) {
-            game = new TenToZero();
-        } else {
-            game = new TenToZero();
-        }
+
 
         Solver solver = new Solver(game);
         for (int pos = 0; pos <= game.getMaxPos(); pos++) {
