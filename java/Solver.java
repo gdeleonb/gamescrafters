@@ -34,7 +34,20 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        Game game = new OddEven();
+        Game game;
+        if (args.length != 1) {
+            System.out.println("Must pass in a game class name.");
+            System.exit(-1);
+        }
+
+        if (args[0].equals("OddEven")) {
+            game = new OddEven();
+        } else if (args[0].equals("TenToZero")) {
+            game = new TenToZero();
+        } else {
+            game = new TenToZero();
+        }
+
         Solver solver = new Solver(game);
         for (int pos = 0; pos <= game.getMaxPos(); pos++) {
             PosValue pVal = solver.solve(pos);
