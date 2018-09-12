@@ -2,27 +2,76 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class OddEven {
-    static int MAX_POSITION = 31;
-    static int MAX_MOVES = 3;
-    static HashMap<Integer, Position> INT_TO_POS = new HashMap<>(MAX_POSITION, 1);
-    static HashMap<Position, Integer> POS_TO_INT = new HashMap<>(MAX_POSITION, 1);
+public class OddEven implements Game {
+    private int maxPos;
+    private int highestMove;
+    private HashMap<Integer, Position> intToPos;
+    private HashMap<Position, Integer> posToInt;
 
-    static {
-        for (int i = MAX_POSITION; i > 0; i-=2) {
+    // Constructors
+    public OddEven() {
+        this.maxPos = 31;
+        this.highestMove = 3;
+        this.intToPos = new HashMap<>(this.maxPos, 1);
+        this.posToInt = new HashMap<>(this.maxPos, 1);
+
+        for (int i = maxPos; i > 0; i-=2) {
             int sticksLeft = i/2;
 
             Position evenPos = new Position(sticksLeft, "even");
-            INT_TO_POS.put(i, evenPos);
-            POS_TO_INT.put(evenPos, i);
+            intToPos.put(i, evenPos);
+            posToInt.put(evenPos, i);
 
             Position oddPos = new Position(sticksLeft, "odd");
-            INT_TO_POS.put(i-1, oddPos);
-            POS_TO_INT.put(oddPos, i-1);
+            intToPos.put(i-1, oddPos);
+            posToInt.put(oddPos, i-1);
         }
     }
 
-    private static class Position {
+    public OddEven(int maxPos) {
+        this.maxPos = maxPos;
+        this.highestMove = 3;
+        this.intToPos = new HashMap<>(this.maxPos, 1);
+        this.posToInt = new HashMap<>(this.maxPos, 1);
+
+        for (int i = maxPos; i > 0; i-=2) {
+            int sticksLeft = i/2;
+
+            Position evenPos = new Position(sticksLeft, "even");
+            intToPos.put(i, evenPos);
+            posToInt.put(evenPos, i);
+
+            Position oddPos = new Position(sticksLeft, "odd");
+            intToPos.put(i-1, oddPos);
+            posToInt.put(oddPos, i-1);
+        }
+    }
+
+    public OddEven(int maxPos, int highestMove) {
+        this.maxPos = maxPos;
+        this.highestMove = highestMove;
+        this.intToPos = new HashMap<>(this.maxPos, 1);
+        this.posToInt = new HashMap<>(this.maxPos, 1);
+
+        for (int i = maxPos; i > 0; i-=2) {
+            int sticksLeft = i/2;
+
+            Position evenPos = new Position(sticksLeft, "even");
+            intToPos.put(i, evenPos);
+            posToInt.put(evenPos, i);
+
+            Position oddPos = new Position(sticksLeft, "odd");
+            intToPos.put(i-1, oddPos);
+            posToInt.put(oddPos, i-1);
+        }
+    }
+
+    // Getters
+    public int getMaxPos() { return this.maxPos; }
+    public int getHighestMove() { return this.highestMove; }
+
+    // Helper psition class
+    private class Position {
         private int sticksLeft;
         private String parity;
 
@@ -50,8 +99,9 @@ public class OddEven {
         }
     }
 
-    public static PosValue primitive(int p) {
-        Position pos = INT_TO_POS.get(p);
+    // Solver Functions
+    public PosValue primitive(int p) {
+        Position pos = this.intToPos.get(p);
         String res;
         if (pos.getSticks() == 0) {
             res = ((pos.getParity().equals("even")) ? "winning" : "losing");
@@ -61,17 +111,17 @@ public class OddEven {
         return new PosValue(res, 0);
     }
 
-    public static ArrayList<Integer> generateMoves(int p) {
-        Position pos = INT_TO_POS.get(p);
-        ArrayList<Integer> moves = new ArrayList<>(MAX_MOVES);
+    public ArrayList<Integer> generateMoves(int p) {
+        Position pos = this.intToPos.get(p);
+        ArrayList<Integer> moves = new ArrayList<>(highestMove);
         moves.add(1);
         if (pos.getSticks() >= 2) moves.add(2);
         if (pos.getSticks() >= 3) moves.add(3);
         return moves;
     }
 
-    public static int doMove(int p, int move) {
-        Position oldPos = INT_TO_POS.get(p);
+    public int doMove(int p, int move) {
+        Position oldPos = this.intToPos.get(p);
 
         int newPosSticks = oldPos.getSticks() - move;
         String newPosParity;
@@ -81,11 +131,11 @@ public class OddEven {
             newPosParity = (oldPos.getParity() == "even") ? "odd" : "even";
         }
         Position newPos = new Position(newPosSticks, newPosParity);
-        return POS_TO_INT.get(newPos);
+        return this.posToInt.get(newPos);
     }
 
-    public static String posToString(int p) {
-        Position pos = INT_TO_POS.get(p);
+    public String posToString(int p) {
+        Position pos = this.intToPos.get(p);
         return String.format("%d sticks left with an %s parity", pos.getSticks(), pos.getParity());
     }
 

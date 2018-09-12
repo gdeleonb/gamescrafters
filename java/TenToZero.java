@@ -1,25 +1,47 @@
 import java.util.ArrayList;
 
-public class TenToZero {
-    static int MAX_POSITION = 10;
-    static int MAX_MOVES = 2;
+public class TenToZero implements Game {
+    private int maxPos;
+    private int highestMove;
 
-    public static PosValue primitive(int pos) {
+    // Constructors
+    public TenToZero() {
+        this.maxPos = 10;
+        this.highestMove = 2;
+    }
+
+    public TenToZero(int maxPos) {
+        this.maxPos = maxPos;
+        this.highestMove = 2;
+    }
+
+    public TenToZero(int maxPos, int highestMove) {
+        this.maxPos = maxPos;
+        this.highestMove = highestMove;
+    }
+
+    // Getters
+    public int getMaxPos() { return this.maxPos; }
+    public int getHighestMove() { return this.highestMove; }
+
+    // Solver Functions
+    public PosValue primitive(int pos) {
         return new PosValue(((pos == 0) ? "losing" : "undecided"), 0);
     }
 
-    public static ArrayList<Integer> generateMoves(int pos) {
-        ArrayList<Integer> moves = new ArrayList<>(MAX_MOVES);
-        moves.add(1);
-        if (pos >= 2) moves.add(2);
+    public ArrayList<Integer> generateMoves(int pos) {
+        ArrayList<Integer> moves = new ArrayList<>(this.highestMove);
+        for (int i = 1; i <= this.highestMove; i++) {
+            if (pos >= i) moves.add(i);
+        }
         return moves;
     }
 
-    public static int doMove(int pos, int move) {
+    public int doMove(int pos, int move) {
         return pos - move;
     }
 
-    public static String posToString(int p) {
+    public String posToString(int p) {
         return String.format("%d", p);
     }
 }

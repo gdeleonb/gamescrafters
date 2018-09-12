@@ -2,20 +2,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Solver {
-    public static HashMap<Integer, PosValue> solved_pos;
+    private HashMap<Integer, PosValue> solvedPos;
+    private Game game;
 
-    public static PosValue solve(int pos) {
-        PosValue pos_val = TenToZero.primitive(pos);
+    public Solver(Game game) {
+        this.game = game;
+        this.solvedPos = new HashMap<>(this.game.getMaxPos(), 1);
+    }
+
+    public PosValue solve(int pos) {
+        PosValue pos_val = game.primitive(pos);
         if (!pos_val.equals("undecided")) return pos_val;
 
-        ArrayList<Integer> moves = TenToZero.generateMoves(pos);
+        ArrayList<Integer> moves = game.generateMoves(pos);
         int numWinningChildren = 0;
-        PosValue outcome;
-        int newPos;
-        int minRemoteness = Integer.MAX_VALUE; // Will change unless something went really wrong
+        int minRemoteness = Integer.MAX_VALUE;
         for (int move : moves) {
-            newPos = TenToZero.doMove(pos, move);
-            outcome = (solved_pos.containsKey(newPos)) ? solved_pos.get(newPos) : solve(newPos);
+            int newPos = game.doMove(pos, move);
+            PosValue outcome = (this.solvedPos.containsKey(newPos)) ? this.solvedPos.get(newPos) : this.solve(newPos);
 
             if (outcome.equals("losing")) {
                 return new PosValue("winning", outcome.getRemoteness() + 1, move);
@@ -30,16 +34,17 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        solved_pos = new HashMap<>(TenToZero.MAX_POSITION, 1);
-        for (int pos = 0; pos <= TenToZero.MAX_POSITION; pos++) {
-            PosValue pVal = solve(pos);
-            solved_pos.put(pos, pVal);
+        Game game = new OddEven();
+        Solver solver = new Solver(game);
+        for (int pos = 0; pos <= game.getMaxPos(); pos++) {
+            PosValue pVal = solver.solve(pos);
+            solver.solvedPos.put(pos, pVal);
 
             String output;
             if (pVal.equals("winning") && pVal.getRemoteness() != 0) {
-                output = String.format("%s is a %s position with a remoteness of %d by playing '%d'.\n", TenToZero.posToString(pos), pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
+                output = String.format("%s is a %s position with a remoteness of %d by playing '%d'.\n", game.posToString(pos), pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
             } else {
-                output = String.format("%s is a %s position with a remoteness of %d.\n", TenToZero.posToString(pos), pVal.getValue(), pVal.getRemoteness());
+                output = String.format("%s is a %s position with a remoteness of %d.\n", game.posToString(pos), pVal.getValue(), pVal.getRemoteness());
             }
 
             System.out.print(output);
