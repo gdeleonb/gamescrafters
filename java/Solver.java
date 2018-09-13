@@ -5,10 +5,12 @@ import java.lang.reflect.*;
 public class Solver {
     private HashMap<Integer, PosValue> solvedPos;
     private Game game;
+    private boolean output;
 
-    public Solver(Game game) {
+    public Solver(Game game, boolean output) {
         this.game = game;
         this.solvedPos = new HashMap<>(this.game.getMaxPos(), 1);
+        this.output = output;
     }
 
     public PosValue solve(int pos) {
@@ -37,16 +39,18 @@ public class Solver {
     public static void main(String[] args) {
         Game game;
         try {
-            if (args.length < 1) {
+            if (args.length < 1 || args.length > 2) {
                 System.out.println("Must pass in a game class name.");
                 System.exit(-1);
             }
-            if (args.length == 2) {
+            if (args.length == 1) {
+                game = (Game) Class.forName(args[0]).newInstance();
+            } else if (args.length == 2) {
                 Class<?> c = Class.forName(args[0]);
                 Constructor<?> con = c.getConstructor(int.class);
                 game = (Game) con.newInstance(Integer.parseInt(args[1]));
             } else {
-                game = (Game) Class.forName(args[0]).newInstance();
+                game = new TenToZero(); // Never executed
             }
         } catch (NumberFormatException nfe) {
             game = new TenToZero();
@@ -58,21 +62,21 @@ public class Solver {
             System.exit(1);
         }
 
-
-
-        Solver solver = new Solver(game);
+        Solver solver = new Solver(game, true);
         for (int pos = 0; pos <= game.getMaxPos(); pos++) {
             PosValue pVal = solver.solve(pos);
             solver.solvedPos.put(pos, pVal);
 
-            String output;
-            if (pVal.equals("winning") && pVal.getRemoteness() != 0) {
-                output = String.format("%s is a %s position with a remoteness of %d by playing '%d'.\n", game.posToString(pos), pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
-            } else {
-                output = String.format("%s is a %s position with a remoteness of %d.\n", game.posToString(pos), pVal.getValue(), pVal.getRemoteness());
-            }
+            if (solver.output) {
+                String output;
+                if (pVal.equals("winning") && pVal.getRemoteness() != 0) {
+                    output = String.format("%s is a %s position with a remoteness of %d by playing '%d'.\n", game.posToString(pos), pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
+                } else {
+                    output = String.format("%s is a %s position with a remoteness of %d.\n", game.posToString(pos), pVal.getValue(), pVal.getRemoteness());
+                }
 
-            System.out.print(output);
+                System.out.print(output);
+            }
         }
     }
 
