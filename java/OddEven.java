@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class OddEven implements Game {
+    final int NUM_PLAYERS = 2;
     private int maxPos;
     private int highestMove;
     private HashMap<Integer, Position> intToPos;
@@ -170,6 +171,7 @@ public class OddEven implements Game {
         for (int i = 1; i <= this.highestMove; i++) {
             if (pos.getSticks() >= i) moves.add(i);
         }
+        moves.trimToSize();
         return moves;
     }
 
@@ -189,7 +191,11 @@ public class OddEven implements Game {
 
     public String posToString(int p) {
         Position pos = this.intToPos.get(p);
-        return String.format("%d sticks left with an %s myParity and %s theirParity", pos.getSticks(), pos.getMine(), pos.getTheirs());
+        return String.format("%d sticks left with an %s parity and %s opponent parity", pos.getSticks(), pos.getMine(), pos.getTheirs());
+    }
+
+    public String instructions() {
+        return String.format("OddEven is a game where you and your opponent take turns\ntaking between 1 and 3 sticks from a pile of %d. When the\nsticks run out, the player with an even number of sticks\nin their hand wins!\n", this.maxPos);
     }
 
 }

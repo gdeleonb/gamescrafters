@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class TenToZero implements Game {
+    final int NUM_PLAYERS = 2;
     private int maxPos;
     private int highestMove;
 
@@ -34,6 +35,7 @@ public class TenToZero implements Game {
         for (int i = 1; i <= this.highestMove; i++) {
             if (pos >= i) moves.add(i);
         }
+        moves.trimToSize();
         return moves;
     }
 
@@ -44,4 +46,9 @@ public class TenToZero implements Game {
     public String posToString(int p) {
         return String.format("%d", p);
     }
+
+    public String instructions() {
+        return String.format("TenToZero is a game where you and your opponent take turns\nsubtracting 1 or 2 from the score (which starts at %d).\nThe player who gets it down to zero wins!\n", this.maxPos);
+    }
+
 }

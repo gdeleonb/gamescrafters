@@ -23,6 +23,10 @@ public class PosValue {
         return winningMove;
     }
 
+    public boolean winning() {
+      return value.equals("winning");
+    }
+
     public boolean equals(Object o) {
         if (o == this) {
             return true;

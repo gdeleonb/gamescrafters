@@ -13,9 +13,14 @@ public class Solver {
         this.output = output;
     }
 
+    public HashMap<Integer, PosValue> getSolvedPos() { return this.solvedPos; }
+
     public PosValue solve(int pos) {
-        PosValue pos_val = game.primitive(pos);
-        if (!pos_val.equals("undecided")) return pos_val;
+        PosValue pVal = game.primitive(pos);
+        if (!pVal.equals("undecided")) {
+            this.solvedPos.put(pos, pVal);
+            return pVal;
+        }
 
         ArrayList<Integer> moves = game.generateMoves(pos);
         int numWinningChildren = 0;
@@ -25,7 +30,9 @@ public class Solver {
             PosValue outcome = (this.solvedPos.containsKey(newPos)) ? this.solvedPos.get(newPos) : this.solve(newPos);
 
             if (outcome.equals("losing")) {
-                return new PosValue("winning", outcome.getRemoteness() + 1, move);
+                pVal = new PosValue("winning", outcome.getRemoteness() + 1, move);
+                this.solvedPos.put(pos, pVal);
+                return pVal;
             } else if (outcome.equals("winning")) {
                 numWinningChildren++;
             }
@@ -33,7 +40,9 @@ public class Solver {
         }
 
         String res = (numWinningChildren == moves.size()) ? "losing" : "tie";
-        return new PosValue(res, minRemoteness + 1);
+        pVal = new PosValue(res, minRemoteness + 1);
+        this.solvedPos.put(pos, pVal);
+        return pVal;
     }
 
     public static void main(String[] args) {
@@ -57,7 +66,7 @@ public class Solver {
             System.out.printf("The second argument must be an integer. Error: %s\n", nfe);
             System.exit(1);
         } catch (Exception e) {
-            game = new TenToZero();
+            game = new TenToZero(); // Complains if I don't have it...
             System.out.println(e);
             System.exit(1);
         }
@@ -65,7 +74,6 @@ public class Solver {
         Solver solver = new Solver(game, true);
         for (int pos = 0; pos <= game.getMaxPos(); pos++) {
             PosValue pVal = solver.solve(pos);
-            solver.solvedPos.put(pos, pVal);
 
             if (solver.output) {
                 String output;
