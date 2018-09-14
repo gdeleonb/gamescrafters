@@ -9,6 +9,6 @@ public interface Game {
     public String posToString(int p);
     public String instructions();
 
-    public int getMaxPos();
+    public int getInitialPos();
     public int getHighestMove();
 }

@@ -2,27 +2,27 @@ import java.util.ArrayList;
 
 public class TenToZero implements Game {
     final int NUM_PLAYERS = 2;
-    private int maxPos;
+    private int initPos;
     private int highestMove;
 
     // Constructors
     public TenToZero() {
-        this.maxPos = 10;
+        this.initPos = 10;
         this.highestMove = 2;
     }
 
-    public TenToZero(int maxPos) {
-        this.maxPos = maxPos;
+    public TenToZero(int initPos) {
+        this.initPos = initPos;
         this.highestMove = 2;
     }
 
-    public TenToZero(int maxPos, int highestMove) {
-        this.maxPos = maxPos;
+    public TenToZero(int initPos, int highestMove) {
+        this.initPos = initPos;
         this.highestMove = highestMove;
     }
 
     // Getters
-    public int getMaxPos() { return this.maxPos; }
+    public int getInitialPos() { return this.initPos; }
     public int getHighestMove() { return this.highestMove; }
 
     // Solver Functions
@@ -48,7 +48,7 @@ public class TenToZero implements Game {
     }
 
     public String instructions() {
-        return String.format("TenToZero is a game where you and your opponent take turns\nsubtracting 1 or 2 from the score (which starts at %d).\nThe player who gets it down to zero wins!\n", this.maxPos);
+        return String.format("TenToZero is a game where you and your opponent take turns\nsubtracting 1 or 2 from the score (which starts at %d).\nThe player who gets it down to zero wins!\n", this.initPos);
     }
 
 }

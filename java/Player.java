@@ -1,11 +1,11 @@
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 import java.lang.reflect.*;
 
 public class Player {
-    private HashMap<Integer, PosValue> solvedPos;
+    private TreeMap<Integer, PosValue> solvedPos;
     private Game game;
     private int curPos;
     private String[] playerNames;
@@ -13,7 +13,7 @@ public class Player {
 
     public Player(Game game) {
         this.game = game;
-        this.curPos = game.getMaxPos();
+        this.curPos = game.getInitialPos();
 
         this.playerNames = new String[this.game.NUM_PLAYERS];
         Scanner scanner = new Scanner(System.in);
@@ -38,9 +38,7 @@ public class Player {
         System.out.println();
 
         Solver solver = new Solver(this.game, false);
-        for (int pos = 0; pos <= this.game.getMaxPos(); pos++) {
-            solver.solve(pos);
-        }
+        solver.solve(this.game.getInitialPos());
         this.solvedPos = solver.getSolvedPos();
     }
 

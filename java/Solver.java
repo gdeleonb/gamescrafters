@@ -1,24 +1,28 @@
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.lang.reflect.*;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class Solver {
-    private HashMap<Integer, PosValue> solvedPos;
+    private TreeMap<Integer, PosValue> solvedPos;
     private Game game;
     private boolean output;
 
     public Solver(Game game, boolean output) {
         this.game = game;
-        this.solvedPos = new HashMap<>(this.game.getMaxPos(), 1);
+        this.solvedPos = new TreeMap<Integer, PosValue>();
         this.output = output;
     }
 
-    public HashMap<Integer, PosValue> getSolvedPos() { return this.solvedPos; }
+    public TreeMap<Integer, PosValue> getSolvedPos() { return this.solvedPos; }
 
     public PosValue solve(int pos) {
         PosValue pVal = game.primitive(pos);
         if (!pVal.equals("undecided")) {
-            this.solvedPos.put(pos, pVal);
+            if (!this.solvedPos.containsKey(pos)) {
+                this.solvedPos.put(pos, pVal);
+            }
             return pVal;
         }
 
@@ -41,7 +45,9 @@ public class Solver {
 
         String res = (numWinningChildren == moves.size()) ? "losing" : "tie";
         pVal = new PosValue(res, minRemoteness + 1);
-        this.solvedPos.put(pos, pVal);
+        if (!this.solvedPos.containsKey(pos)) {
+            this.solvedPos.put(pos, pVal);
+        }
         return pVal;
     }
 
@@ -72,20 +78,20 @@ public class Solver {
         }
 
         Solver solver = new Solver(game, true);
-        for (int pos = 0; pos <= game.getMaxPos(); pos++) {
-            PosValue pVal = solver.solve(pos);
-
-            if (solver.output) {
-                String output;
+        solver.solve(game.getInitialPos());
+        Set<Entry<Integer, PosValue>> entrySet = solver.solvedPos.entrySet();
+        if (solver.output) {
+            String output;
+            PosValue pVal;
+            for (Entry<Integer, PosValue> entry : entrySet) {
+                pVal = entry.getValue();
                 if (pVal.equals("winning") && pVal.getRemoteness() != 0) {
-                    output = String.format("%s is a %s position with a remoteness of %d by playing '%d'.\n", game.posToString(pos), pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
+                    output = String.format("%s is a %s position with a remoteness of %d by playing '%d'.\n", game.posToString(entry.getKey()), pVal.getValue(), pVal.getRemoteness(), pVal.getWinningMove());
                 } else {
-                    output = String.format("%s is a %s position with a remoteness of %d.\n", game.posToString(pos), pVal.getValue(), pVal.getRemoteness());
+                    output = String.format("%s is a %s position with a remoteness of %d.\n", game.posToString(entry.getKey()), pVal.getValue(), pVal.getRemoteness());
                 }
-
                 System.out.print(output);
             }
         }
     }
-
 }

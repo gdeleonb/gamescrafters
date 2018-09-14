@@ -4,22 +4,22 @@ import java.util.Objects;
 
 public class OddEven implements Game {
     final int NUM_PLAYERS = 2;
-    private int maxPos;
+    private int initPos;
     private int highestMove;
     private HashMap<Integer, Position> intToPos;
     private HashMap<Position, Integer> posToInt;
 
     // Constructors
     public OddEven() {
-        this.maxPos = 30;
+        this.initPos = 30;
         this.highestMove = 3;
-        this.intToPos = new HashMap<>(this.maxPos, 1);
-        this.posToInt = new HashMap<>(this.maxPos, 1);
+        this.intToPos = new HashMap<>(this.initPos, 1);
+        this.posToInt = new HashMap<>(this.initPos, 1);
 
-        for (int i = this.maxPos; i >= 0; i-=2) {
+        for (int i = this.initPos; i >= 0; i-=2) {
             int sticksLeft = i/2;
 
-            if (i == this.maxPos) {
+            if (i == this.initPos) {
                 Position evenPos = new Position(sticksLeft, "even", "even");
                 intToPos.put(i, evenPos);
                 posToInt.put(evenPos, i);
@@ -43,20 +43,20 @@ public class OddEven implements Game {
         }
     }
 
-    public OddEven(int maxPos) {
-        if (maxPos % 2 == 0) {
-            System.out.println("maxPos must be odd.");
+    public OddEven(int initPos) {
+        if (initPos % 2 == 0) {
+            System.out.println("initPos must be odd.");
             System.exit(1);
         }
-        this.maxPos = maxPos * 2;
+        this.initPos = initPos * 2;
         this.highestMove = 3;
-        this.intToPos = new HashMap<>(this.maxPos, 1);
-        this.posToInt = new HashMap<>(this.maxPos, 1);
+        this.intToPos = new HashMap<>(this.initPos, 1);
+        this.posToInt = new HashMap<>(this.initPos, 1);
 
-        for (int i = this.maxPos; i >= 0; i-=2) {
+        for (int i = this.initPos; i >= 0; i-=2) {
             int sticksLeft = i/2;
 
-            if (i == this.maxPos) {
+            if (i == this.initPos) {
                 Position evenPos = new Position(sticksLeft, "even", "even");
                 intToPos.put(i, evenPos);
                 posToInt.put(evenPos, i);
@@ -80,20 +80,20 @@ public class OddEven implements Game {
         }
     }
 
-    public OddEven(int maxPos, int highestMove) {
-        if (maxPos % 2 == 0) {
-            System.out.println("maxPos must be odd.");
+    public OddEven(int initPos, int highestMove) {
+        if (initPos % 2 == 0) {
+            System.out.println("initPos must be odd.");
             System.exit(1);
         }
-        this.maxPos = maxPos * 2;
+        this.initPos = initPos * 2;
         this.highestMove = highestMove;
-        this.intToPos = new HashMap<>(this.maxPos, 1);
-        this.posToInt = new HashMap<>(this.maxPos, 1);
+        this.intToPos = new HashMap<>(this.initPos, 1);
+        this.posToInt = new HashMap<>(this.initPos, 1);
 
-        for (int i = this.maxPos; i >= 0; i-=2) {
+        for (int i = this.initPos; i >= 0; i-=2) {
             int sticksLeft = i/2;
 
-            if (i == this.maxPos) {
+            if (i == this.initPos) {
                 Position evenPos = new Position(sticksLeft, "even", "even");
                 intToPos.put(i, evenPos);
                 posToInt.put(evenPos, i);
@@ -118,7 +118,7 @@ public class OddEven implements Game {
     }
 
     // Getters
-    public int getMaxPos() { return this.maxPos; }
+    public int getInitialPos() { return this.initPos; }
     public int getHighestMove() { return this.highestMove; }
 
     // Helper psition class
@@ -195,7 +195,7 @@ public class OddEven implements Game {
     }
 
     public String instructions() {
-        return String.format("OddEven is a game where you and your opponent take turns\ntaking between 1 and 3 sticks from a pile of %d. When the\nsticks run out, the player with an even number of sticks\nin their hand wins!\n", this.maxPos);
+        return String.format("OddEven is a game where you and your opponent take turns\ntaking between 1 and 3 sticks from a pile of %d. When the\nsticks run out, the player with an even number of sticks\nin their hand wins!\n", this.initPos);
     }
 
 }
